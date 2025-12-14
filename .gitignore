@@ -29,7 +29,103 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
+### STS ###############################
+# OS / General
+############################
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Archives / Packages
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# BlueJ
+*.ctxt
+
+# J2ME
+.mtj.tmp/
+
+# JVM crash logs
+hs_err_pid*
+replay_pid*
+
+HELP.md
+
+############################
+# Build outputs
+############################
+
+# Maven / Gradle style
+target/
+build/
+
+# If you ever really need to keep a target or build under src, uncomment:
+# !**/src/main/**/target/
+# !**/src/test/**/target/
+# !**/src/main/**/build/
+# !**/src/test/**/build/
+
+# Maven wrapper
+!.mvn/wrapper/maven-wrapper.jar
+
+############################
+# IntelliJ IDEA
+############################
+
+.idea/
+*.iws
+*.iml
+*.ipr
+
+############################
+# Eclipse / STS
+############################
+
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+############################
+# NetBeans
+############################
+
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+############################
+# VS Code (if used)
+############################
+
+.vscode/
+
+############################
+# Local tooling / misc
+############################
+
+# Uncomment if you don’t want workspace-local data sources etc
+# .idea/dataSources/
+# .idea/dataSources.local.xml
 .apt_generated
 .classpath
 .factorypath
