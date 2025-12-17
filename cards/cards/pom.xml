@@ -11,6 +11,7 @@
 	<groupId>com.tdtien</groupId>
 	<artifactId>cards</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>cards</name>
 	<description>Microservice for Cards</description>
 	<url/>
@@ -109,6 +110,16 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<to>
+						<image>tientran1504/${project.artifactId}:v1</image>
+					</to>
 				</configuration>
 			</plugin>
 		</plugins>
