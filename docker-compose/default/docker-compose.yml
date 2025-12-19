@@ -1,0 +1,80 @@
+services:
+  rabbit:
+    image: "rabbitmq:4-management"
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"   # RabbitMQ default port
+      - "15672:15672" # RabbitMQ Management UI port
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s # give some time for the service to start
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
+  configserver:
+    image: "tientran1504/configserver:v2"
+    container_name: "configserver-ms"
+    ports:
+      - "8071:8071"
+    depends_on:
+      rabbit:
+        condition: service_healthy # wait for rabbitmq to be healthy
+    healthcheck:
+      test: "curl --fail --silent http://localhost:8071/actuator/health/readiness | grep UP || exit 1" # check readiness probe
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s # give some time for the service to start
+    extends:
+      file: common-config.yml
+      service: microservice-base-config
+
+  accounts:
+    image: "tientran1504/accounts:v2"
+    container_name: "accounts-ms"
+    ports:
+      - "8080:8080"
+    depends_on:
+      configserver:
+        condition: service_healthy # wait for configserver to be healthy (readiness probe)
+    environment:
+      SPRING_APPLICATION_NAME: "accounts"
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+
+  loans:
+    image: "tientran1504/loans:v2"
+    container_name: "loans-ms"
+    ports:
+      - "8090:8090"
+    depends_on:
+      configserver:
+        condition: service_healthy # wait for configserver to be healthy (readiness probe)
+    environment:
+      SPRING_APPLICATION_NAME: "loans"
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+
+  cards:
+    image: "tientran1504/cards:v2"
+    container_name: "cards-ms"
+    ports:
+      - "9000:9000"
+    depends_on:
+      configserver:
+        condition: service_healthy # wait for configserver to be healthy (readiness probe)
+    environment:
+      SPRING_APPLICATION_NAME: "cards"
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+
+networks:
+  tdtien:
+    driver: "bridge"
