@@ -22,11 +22,36 @@ spring:
     import:
       - "optional:configserver:http://localhost:8071/"
 
+build:
+  version: 1.0.0
+
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+  info:
+    env:
+      enabled: true
 
-build:
-  version: 1.0.0
+endpoints:
+  shutdown:
+    enabled: true
+
+eureka:
+  instance:
+    preferIpAddress: true # Use IP address for registration
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/  # URL for Eureka server registration http://localhost:8070/eureka/
+
+info:
+  app:
+    name: ${spring.application.name}
+    description: "Cards Service"
+    version: "1.0.0"
