@@ -1,28 +1,9 @@
 services:
-  rabbit:
-    image: "rabbitmq:4-management"
-    hostname: rabbitmq
-    ports:
-      - "5672:5672"   # RabbitMQ default port
-      - "15672:15672" # RabbitMQ Management UI port
-    healthcheck:
-      test: rabbitmq-diagnostics check_port_connectivity
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 10s # give some time for the service to start
-    extends:
-      file: common-config.yml
-      service: network-deploy-service
-
   configserver:
     image: "tientran1504/configserver:v2"
     container_name: "configserver-ms"
     ports:
       - "8071:8071"
-    depends_on:
-      rabbit:
-        condition: service_healthy # wait for rabbitmq to be healthy
     healthcheck:
       test: "curl --fail --silent http://localhost:8071/actuator/health/readiness | grep UP || exit 1" # check readiness probe
       interval: 10s
@@ -33,6 +14,23 @@ services:
       file: common-config.yml
       service: microservice-base-config
 
+  eurekaserver:
+    image: "tientran1504/eurekaserver:v2"
+    container_name: "eurekaserver-ms"
+    ports:
+      - "8070:8070"
+    healthcheck:
+      test: "curl --fail --silent http://localhost:8070/actuator/health/readiness | grep UP || exit 1" # check readiness probe
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s # give some time for the service to start
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+    environment:
+      SPRING_APPLICATION_NAME: "eurekaserver"
+
   accounts:
     image: "tientran1504/accounts:v2"
     container_name: "accounts-ms"
@@ -42,7 +40,8 @@ services:
       SPRING_APPLICATION_NAME: "accounts"
     extends:
       file: common-config.yml
-      service: microservice-configserver-config
+      service: microservice-eureka-config
+
 
   loans:
     image: "tientran1504/loans:v2"
@@ -53,7 +52,7 @@ services:
       SPRING_APPLICATION_NAME: "loans"
     extends:
       file: common-config.yml
-      service: microservice-configserver-config
+      service: microservice-eureka-config
 
   cards:
     image: "tientran1504/cards:v2"
@@ -64,7 +63,7 @@ services:
       SPRING_APPLICATION_NAME: "cards"
     extends:
       file: common-config.yml
-      service: microservice-configserver-config
+      service: microservice-eureka-config
 
 networks:
   tdtien:
