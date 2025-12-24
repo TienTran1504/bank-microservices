@@ -38,3 +38,12 @@ logging:
     com:
       tdtien:
         gatewayserver: DEBUG
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 10 # of calls to consider for the circuit breaker
+        permitted-number-of-calls-in-half-open-state: 2 # calls allowed when half-open
+        wait-duration-in-open-state: 10000 # time to wait before transitioning from open to half-open (in ms)
+        failure-rate-threshold: 50 # percentage of failures to open the circuit
