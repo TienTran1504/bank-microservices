@@ -1,3 +1,6 @@
+server:
+  port: 8072
+
 spring:
   application:
     name: "gatewayserver"
@@ -9,8 +12,8 @@ spring:
         webflux:
           discovery:
             locator:
-              enabled: false
-              lowerCaseServiceId: true
+              lower-case-service-id: true
+              enabled: true
 
 management:
   endpoints:
@@ -27,5 +30,5 @@ management:
 info:
   app:
     name: "gatewayserver"
-    description: "Eazy Bank Gateway Server Application"
+    description: "GatewayServer Application"
     version: "1.0.0"
