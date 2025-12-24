@@ -81,3 +81,15 @@ resilience4j:
         permitted-number-of-calls-in-half-open-state: 2 # calls allowed when half-open
         wait-duration-in-open-state: 10000 # time to wait before transitioning from open to half-open (in ms)
         failure-rate-threshold: 50 # percentage of failures to open the circuit
+
+  retry:
+    configs:
+      default:
+        max-attempts: 3
+        wait-duration: 100
+        enable-exponential-backoff: true # Enable exponential backoff for retries Example: 100ms, 200ms, 400ms
+        exponential-backoff-multiplier: 2.0 # Multiplier for exponential backoff Example: 100ms, 200ms, 400ms
+        ignore-exceptions:
+          - java.lang.NullPointerException
+        retry-exceptions: # Exceptions that will trigger a retry --> don't need the ignore-exceptions because it only retries on these exceptions
+          - java.util.concurrent.TimeoutException
