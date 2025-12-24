@@ -6,6 +6,7 @@ import com.tdtien.accounts.dto.CustomerDto;
 import com.tdtien.accounts.dto.ErrorResponseDto;
 import com.tdtien.accounts.dto.ResponseDto;
 import com.tdtien.accounts.service.IAccountsService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -194,11 +195,19 @@ public class AccountsController {
             )
     }
     )
+    @RateLimiter(name="getJavaVersion", fallbackMethod = "getJavaVersionFallback")
     @GetMapping("/java-version")
     public ResponseEntity<String> getJavaVersion() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(environment.getProperty("JAVA_HOME"));
+    }
+
+    public ResponseEntity<String> getJavaVersionFallback(Throwable ex) {
+        logger.error("Get Java Version REST API failed: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("JAVA_HOME not found");
     }
 
     @Operation(
