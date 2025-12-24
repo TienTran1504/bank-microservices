@@ -54,3 +54,9 @@ info:
     name: ${spring.application.name}
     description: "Accounts Service"
     version: "1.0.0"
+
+logging:
+  level:
+    com:
+      tdtien:
+        accounts: DEBUG

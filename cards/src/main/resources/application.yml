@@ -55,3 +55,9 @@ info:
     name: ${spring.application.name}
     description: "Cards Service"
     version: "1.0.0"
+
+logging:
+  level:
+    com:
+      tdtien:
+        cards: DEBUG
