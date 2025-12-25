@@ -44,6 +44,9 @@ Desktop.ini
 # Logs
 *.log
 
+# Meta
+*.meta
+
 # Archives / Packages
 *.jar
 *.war
@@ -72,7 +75,7 @@ HELP.md
 # Maven / Gradle style
 target/
 build/
-
+.data/
 # If you ever really need to keep a target or build under src, uncomment:
 # !**/src/main/**/target/
 # !**/src/test/**/target/
