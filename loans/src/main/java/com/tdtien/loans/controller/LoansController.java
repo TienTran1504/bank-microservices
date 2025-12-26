@@ -99,8 +99,10 @@ public class LoansController {
     public ResponseEntity<LoansDto> getLoanDetails(@RequestHeader("bank-correlation-id") String correlationId,
                                                     @RequestParam @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
                                                      String mobileNumber) {
-        logger.debug("Get Loan Details REST API called for correlation id: {}", correlationId);
+        //logger.debug("Get Loan Details REST API called for correlation id: {}", correlationId);
+        logger.debug("getLoanDetails method start");
         LoansDto loansDto = iLoansService.getLoan(mobileNumber);
+        logger.debug("getLoanDetails method end");
         return ResponseEntity.status(HttpStatus.OK).body(loansDto);
     }
 

@@ -99,8 +99,10 @@ public class CardsController {
     public ResponseEntity<CardsDto> getCardDetails(@RequestHeader("bank-correlation-id") String correlationId,
                                                     @RequestParam @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
                                                      String mobileNumber) {
-        logger.debug("Fetching Card Details REST API for correlation id: {}", correlationId);
+        //logger.debug("Fetching Card Details REST API for correlation id: {}", correlationId);
+        logger.debug("getCardDetails method start");
         CardsDto cardsDto = iCardsService.getCard(mobileNumber);
+        logger.debug("getCardDetails method end");
         return ResponseEntity.status(HttpStatus.OK).body(cardsDto);
     }
 
