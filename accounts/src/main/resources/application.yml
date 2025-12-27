@@ -24,6 +24,22 @@ spring:
     openfeign:
       circuitbreaker:
         enabled: true
+    stream:
+      bindings:
+        updateCommunication-in-0:
+            destination: communication-sent # the name of the input channel.
+            group: ${spring.application.name}
+        sendCommunication-out-0:
+            destination: send-communication # the name of the output channel.
+    function:
+      definition: updateCommunication # the name of the function bean
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    connection-timeout: 10s
+
 
 build:
     version: 1.0.0

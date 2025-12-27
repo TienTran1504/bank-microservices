@@ -1,3 +1,22 @@
+server:
+  port: 9090
+
 spring:
   application:
-    name: message
+    name: "message"
+  cloud:
+    function:
+      definition: email|sms
+    stream:
+      bindings:
+        emailsms-in-0: # the name of the input channel.
+          destination: send-communication # the name of the input channel.
+          group: ${spring.application.name}
+        emailsms-out-0: # the name of the output channel.
+          destination: communication-sent # the name of the output channel.
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    connection-timeout: 10s

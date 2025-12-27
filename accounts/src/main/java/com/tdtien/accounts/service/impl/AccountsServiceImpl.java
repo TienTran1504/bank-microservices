@@ -2,6 +2,7 @@ package com.tdtien.accounts.service.impl;
 
 import com.tdtien.accounts.constants.AccountsConstants;
 import com.tdtien.accounts.dto.AccountsDto;
+import com.tdtien.accounts.dto.AccountsMsgDto;
 import com.tdtien.accounts.dto.CustomerDto;
 import com.tdtien.accounts.entity.Accounts;
 import com.tdtien.accounts.entity.Customer;
@@ -13,6 +14,9 @@ import com.tdtien.accounts.repository.AccountsRepository;
 import com.tdtien.accounts.repository.CustomerRepository;
 import com.tdtien.accounts.service.IAccountsService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,9 +27,10 @@ import java.util.Random;
 @AllArgsConstructor
 public class AccountsServiceImpl implements IAccountsService {
 
+    private static final Logger logger = LoggerFactory.getLogger(AccountsServiceImpl.class);
     private AccountsRepository accountsRepository;
     private CustomerRepository customerRepository;
-
+    private final StreamBridge streamBridge; // to send messages to other microservices
     /**
      * Create a new account for a customer.
      *
@@ -39,9 +44,17 @@ public class AccountsServiceImpl implements IAccountsService {
             throw new CustomerAlreadyExistsException("Customer already registered with mobile number: " + customerDto.getMobileNumber());
         }
         Customer savedCustomer = customerRepository.save(customer);
-        accountsRepository.save(createNewAccountForCustomer(savedCustomer));
+        Accounts savedAccount = accountsRepository.save(createNewAccountForCustomer(savedCustomer));
+        sendCommunication(savedAccount, savedCustomer);
     }
 
+    private void sendCommunication(Accounts account, Customer customer) {
+        var accountsMsgDto = new AccountsMsgDto(
+                account.getAccountNumber(), customer.getName(), customer.getEmail(), customer.getMobileNumber());
+        logger.info("Sending communication request for the details: {}", accountsMsgDto);
+        var result = streamBridge.send("sendCommunication-out-0", accountsMsgDto);
+        logger.info("Communication request sent successfully ? : {}", result);
+    }
     /**
      * Get account details by mobile number.
      *
@@ -104,6 +117,28 @@ public class AccountsServiceImpl implements IAccountsService {
         accountsRepository.deleteByCustomerId(customer.getCustomerId());
         customerRepository.deleteById(customer.getCustomerId());
         return true;
+    }
+
+    /**
+     * Update communication status for an account.
+     *
+     * @param accountNumber the account number
+     * @return boolean indicating if the update was successful or not
+     */
+    @Override
+    public boolean updateCommunicationStatus(Long accountNumber) {
+        logger.info("Updating communication status for the details: {}", accountsRepository.findById(accountNumber));
+        boolean isUpdated = false;
+
+        if(accountNumber != null) {
+            Accounts accounts = accountsRepository.findById(accountNumber)
+                    .orElseThrow(() -> new ResourceNotFoundException("Account", "accountNumber", accountNumber.toString())
+                    );
+            accounts.setCommunicationSw(true);
+            accountsRepository.save(accounts);
+            isUpdated = true;
+        }
+        return isUpdated;
     }
 
 
