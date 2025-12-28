@@ -31,14 +31,13 @@ spring:
             group: ${spring.application.name}
         sendCommunication-out-0:
             destination: send-communication # the name of the output channel.
+      kafka:
+        binder:
+          brokers:
+            - localhost:9092
     function:
       definition: updateCommunication # the name of the function bean
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    connection-timeout: 10s
+
 
 
 build:
@@ -103,6 +102,12 @@ resilience4j:
         wait-duration-in-open-state: 10000 # time to wait before transitioning from open to half-open (in ms)
         failure-rate-threshold: 50 # percentage of failures to open the circuit
 
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 10s
+        cancel-running-future: true
+
   retry:
     configs:
       default:
@@ -121,3 +126,5 @@ resilience4j:
         timeout-duration: 1000 # Time to wait for a permission
         limit-refresh-period: 5000 # Time period for rate limiting
         limit-for-period: 1 # Number of calls allowed per period
+
+
