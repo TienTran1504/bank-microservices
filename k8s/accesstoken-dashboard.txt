@@ -1,0 +1,28 @@
+start k8s dashboard: kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy 8443:443
+access to k8s dashboard: https://localhost:8443/
+
+apply yml file: example
+	D:\project\k8s>kubectl apply -f dashboard-adminuser.yaml
+	serviceaccount/admin-user created
+
+	D:\project\k8s>kubectl apply -f dashboard-rolebinding.yaml
+	clusterrolebinding.rbac.authorization.k8s.io/admin-user created
+
+get replica: kubectl get replicaset
+get pods: kubectl get pods
+delete pod: kubectl delete pod <pod-name>
+get event: kubectl get events --sort-by='.metadata.creationTimestamp'
+scale deployment using cli: kubectl scale deployment <deployment-name> --replicas=<number-of-replicas>
+ Ex: kubectl scale deployment accounts-deployment --replicas=1
+describe pod: kubectl describe pod <pod-name>
+setimage: kubectl set image deployment <deployment-name> <container-name>=<new-image>
+ Ex: kubectl set image deployment accounts-deployment accounts-container=tientran1504/accounts:v2
+rollout history: kubectl rollout history deployment <deployment-name>
+ Ex: kubectl rollout history deployment accounts-deployment
+rollback: kubectl rollout undo deployment <deployment-name> --to-revision=<revision-number>
+ Ex: kubectl rollout undo deployment accounts-deployment --to-revision=2
+get services: kubectl get services
+delete file: kubectl delete -f <file-name>.yaml
+ Ex: kubectl delete -f dashboard-adminuser.yaml
+
+token access dashboard: eyJhbGciOiJSUzI1NiIsImtpZCI6InQzN0VYTElOU0cwQWNzOVZlTVU0aVk4Ym1jSVNMek1WTDdvazZSU3Z2dkkifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiI2NmEwZmU4MC05YzhlLTQzZTAtYTQzZS03ZmM4ODNhZjA1NGIiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZXJuZXRlcy1kYXNoYm9hcmQ6YWRtaW4tdXNlciJ9.fQNL0hvD2pnnqIDShHAL6LGLLUfEA6sxkd3K4epF6FPN1LLMiVEyEyede7HNHa5Od0BZW-nqj4ZSZEo3tbkJDv-F6l_5Lx3oo6IwhTs1QvOj1NO8yDHuZOqDziwbcmCnBwXiqO-S_6NCPROz3F4E9M-rG1kXCfWH3aZsrbNz31PqSzn4HMKoeifrfoUcSnH1AfUPFmVwWAoZeIq8cI6e6IF3jDGf_wD95hFg2uD30Aa2FQLlxHtt3hPQaMUGS27DtAUMMEO7owMHR8KULliLFBUq6I6ZYRUgAG4pHXg8Tfesng-i4FDggeHvhCNffSGgGZtMKBdbAv4AzDk3eKf4-w
