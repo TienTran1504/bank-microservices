@@ -1,0 +1,5 @@
+helm dependencies build: This command is used to build the dependencies for a Helm chart.
+helm template .: This command is used to render the templates in a Helm chart and output the resulting Kubernetes manifests.
+helm ls: This command lists all the releases in the current Kubernetes cluster.
+helm uninstall <release-name>: This command is used to remove a Helm release from the Kubernetes cluster.
+
