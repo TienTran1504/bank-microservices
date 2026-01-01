@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.0</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>com.tdtien</groupId>
+		<artifactId>bank-bom</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../bank-bom/pom.xml</relativePath>
 	</parent>
 	<groupId>com.tdtien</groupId>
 	<artifactId>loans</artifactId>
@@ -27,11 +27,6 @@
 		<tag/>
 		<url/>
 	</scm>
-	<properties>
-		<java.version>21</java.version>
-		<spring-cloud.version>2025.1.0</spring-cloud.version>
-		<otelVersion>2.22.0</otelVersion>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -44,12 +39,13 @@
 		<dependency>
 			<groupId>io.opentelemetry.javaagent</groupId>
 			<artifactId>opentelemetry-javaagent</artifactId>
-			<version>${otelVersion}</version>
+			<version>${otel.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
+			<version>${micrometer.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -82,6 +78,7 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+			<version>${lombok.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springdoc</groupId>
@@ -132,10 +129,10 @@
 			<plugin>
 				<groupId>com.google.cloud.tools</groupId>
 				<artifactId>jib-maven-plugin</artifactId>
-				<version>3.5.1</version>
+				<version>${jib.version}</version>
 				<configuration>
 					<to>
-						<image>tientran1504/${project.artifactId}:v2</image>
+						<image>tientran1504/${project.artifactId}:${image.tag}</image>
 					</to>
 				</configuration>
 			</plugin>

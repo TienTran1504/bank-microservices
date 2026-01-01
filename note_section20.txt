@@ -1,0 +1,1 @@
+start kafka server on port 9092: docker run -p 9092:9092 apache/kafka:4.1.1
